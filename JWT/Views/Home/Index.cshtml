@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+@section Scripts{
+    <script>
+        
+        var model = {
+            "username": "goku",
+            "password": "goku"
+        }
+
+        $.ajax({
+            url: '@Url.Action("Authenticate", "home")',
+            type: 'post',
+            data: JSON.stringify(model),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userRole", data.user.role)
+                return;// return 葉面
+            },
+            error: function (x) {
+                alert(x.responseText);
+            }
+        });
+
+        var token = localStorage.getItem("token");
+        var userRole = localStorage.getItem("userRole");
+        var headers = {};
+        if (token) {
+            headers.Authorization = 'Bearer ' + token;
+        }
+        if (userRole == "manager") {
+            console.log(userRole == "manager");
+            $.ajax({
+                type: 'GET',
+                url: 'home/Manager',
+                headers: headers
+            }).done(function (data) {
+                console.log(data);
+            });
+        }
+        else {
+            $.ajax({
+                type: 'GET',
+                url: 'home/Home',
+                headers: headers
+            }).done(function (data) {
+                console.log(data);
+            });
+        }
+
+        
+
+    </script>
+}

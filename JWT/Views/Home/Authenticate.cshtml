@@ -1,0 +1,19 @@
+﻿@section Scripts{
+    <script>
+        var token = sessionStorage.getItem("token");
+        var headers = {};
+        console.log(token);
+        if (token) {
+            headers.Authorization = 'Bearer ' + token;
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: 'home/Manager',
+            headers: headers,
+            success: function (data) {
+                console.log(data);
+            }
+        })
+    </script>
+}
